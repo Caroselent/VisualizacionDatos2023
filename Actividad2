@@ -1,0 +1,39 @@
+library(shiny)
+
+ui <- fluidPage(
+  fluidRow(
+    column(
+      12,
+      h1("Longitud de Sépalo")
+    )
+  ),
+  hr(),
+  fluidRow(
+    column(
+      4,
+      selectInput(
+        inputId = "select_sepal",
+        label = "Tipo de Sépalo",
+        choices = unique(iris$Species),
+        multiple = FALSE
+      )
+    ),
+    column(
+      8,
+      plotOutput("grafboxplot")
+    )
+  )
+)
+
+server <- function(input, output, session) {
+  
+  output$grafboxplot <- renderPlot({
+    especie <- input$select_sepal
+    data_grafico <- iris[iris$Species == especie, "Sepal.Length"]
+    
+    boxplot(data_grafico, 
+            main = paste("Longitud del Sépalo, especie", especie),
+            cex.main = 1,
+            ylab = "Longitud del Sépalo", cex.lab = 0.8)
+  })
+}
